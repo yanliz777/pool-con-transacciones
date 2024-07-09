@@ -7,8 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CategoriaRepositorioImpl implements Repositorio<Categoria> {
+    //para que la conexión siempre sea la misma para todos los métodos:
     private Connection conn;
-
+/*
+En el constructor le pasamos la conexión
+por que la conexión se debe pasar de alguna forma
+ */
     public CategoriaRepositorioImpl(Connection conn) {
         this.conn = conn;
     }
@@ -57,6 +61,7 @@ public class CategoriaRepositorioImpl implements Repositorio<Categoria> {
             if (categoria.getId() == null) {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
+                    //obtenemos el último id generado
                         categoria.setId(rs.getLong(1));
                     }
                 }

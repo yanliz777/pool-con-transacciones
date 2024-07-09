@@ -12,9 +12,12 @@ de estos, es decir, en la declaración de cada método del CRUD
 y en caso de error se le daran manejo en el método main
  */
 public class ProductoRepositorioImpl implements Repositorio<Producto>{
-
+    //para que la conexión siempre sea la misma para todos los métodos:
     private Connection conn;
-
+/*
+En el constructor le pasamos la conexión
+por que la conexión se debe pasar de alguna forma
+ */
     public ProductoRepositorioImpl(Connection conn) {
         this.conn = conn;
     }
@@ -54,15 +57,21 @@ public class ProductoRepositorioImpl implements Repositorio<Producto>{
     @Override
     public Producto guardar(Producto producto) throws SQLException {
         String sql;
-        if (producto.getId() != null && producto.getId()>0) {
+        if (producto.getId() != null && producto.getId()>0)//si es true actualiza
+        {
             sql = "UPDATE productos SET nombre=?, precio=?, categoria_id=?, sku=? WHERE id=?";
-        } else {
+        }
+        else //sino Inserta el objeto
+        {
             sql = "INSERT INTO productos(nombre, precio, categoria_id, sku, fecha_registro) VALUES(?,?,?,?,?)";
         }
  /*
- Statement.RETURN_GENERATED_KEYS: Permite obtener la clave primaria generada automáticamente
- después de una operación de inserción,
- lo cual es útil para relaciones entre tablas o para hacer referencia al nuevo registro.
+ Statement.RETURN_GENERATED_KEYS: Permite obtener la clave
+ primaria generada automáticamente después de una operación de inserción,
+ lo cual es útil para relaciones entre tablas o para hacer
+ referencia al nuevo registro.
+ (PreparedStatement) para insertar/actualizar un nuevo registro en
+ la base de datos y establece los valores de los parámetros de la consulta SQL
   */
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, producto.getNombre());
@@ -85,6 +94,7 @@ registro, y luego asignar esta clave generada al objeto producto
             if (producto.getId() == null) {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
+                        //obtenemos el último id generado
                         producto.setId(rs.getLong(1));
                     }
                 }
