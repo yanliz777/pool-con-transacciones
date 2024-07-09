@@ -6,7 +6,11 @@ import org.aguzman.java.jdbc.modelo.Producto;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+todos los catch de los distintos métodos(CRUD) se lanzan en la declaración de
+de estos, es decir, en la declaración de cada método del CRUD
+y en caso de error se le daran manejo en el método main
+ */
 public class ProductoRepositorioImpl implements Repositorio<Producto>{
 
     private Connection conn;
@@ -55,6 +59,11 @@ public class ProductoRepositorioImpl implements Repositorio<Producto>{
         } else {
             sql = "INSERT INTO productos(nombre, precio, categoria_id, sku, fecha_registro) VALUES(?,?,?,?,?)";
         }
+ /*
+ Statement.RETURN_GENERATED_KEYS: Permite obtener la clave primaria generada automáticamente
+ después de una operación de inserción,
+ lo cual es útil para relaciones entre tablas o para hacer referencia al nuevo registro.
+  */
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, producto.getNombre());
             stmt.setLong(2, producto.getPrecio());
@@ -68,7 +77,11 @@ public class ProductoRepositorioImpl implements Repositorio<Producto>{
             }
 
             stmt.executeUpdate();
-
+/*
+se utiliza para obtener la clave primaria generada automáticamente
+por la base de datos después de realizar una inserción de un nuevo
+registro, y luego asignar esta clave generada al objeto producto
+ */
             if (producto.getId() == null) {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
@@ -97,6 +110,7 @@ public class ProductoRepositorioImpl implements Repositorio<Producto>{
         p.setPrecio(rs.getInt("precio"));
         p.setFechaRegistro(rs.getDate("fecha_registro"));
         p.setSku(rs.getString("sku"));
+
         Categoria categoria = new Categoria();
         categoria.setId(rs.getLong("categoria_id"));
         categoria.setNombre(rs.getString("categoria"));
