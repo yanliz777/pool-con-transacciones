@@ -32,6 +32,7 @@ por que la conexión se debe pasar de alguna forma
     @Override
     public Categoria porId(Long id) throws SQLException {
         Categoria categoria = null;
+        //(PreparedStatement)se utilizara cuando se le envían parámetros en la consulta, el id.
         try (PreparedStatement stmt = conn.prepareStatement("SELECT * FROM categorias as c WHERE c.id=?")) {
             stmt.setLong(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -61,7 +62,8 @@ por que la conexión se debe pasar de alguna forma
             if (categoria.getId() == null) {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
-                    //obtenemos el último id generado
+                    //obtenemos el último id generado, para establecer una relación con
+                    //la clase producto porque es la llave foracnea en productos
                         categoria.setId(rs.getLong(1));
                     }
                 }

@@ -25,13 +25,13 @@ por que la conexión se debe pasar de alguna forma
     @Override
     public List<Producto> listar() throws SQLException {
         List<Producto> productos = new ArrayList<>();
-
+// ResultSet rs: me trae los regisros que hayan en la BD
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT p.*, c.nombre as categoria FROM productos as p " +
                      "inner join categorias as c ON (p.categoria_id = c.id)")) {
             while (rs.next()) {
                 Producto p = crearProducto(rs);
-                productos.add(p);
+                productos.add(p);//poblamos el arraylist con los registros que hayan en BD
             }
         }
         return productos;
@@ -70,8 +70,9 @@ por que la conexión se debe pasar de alguna forma
  primaria generada automáticamente después de una operación de inserción,
  lo cual es útil para relaciones entre tablas o para hacer
  referencia al nuevo registro.
- (PreparedStatement) para insertar/actualizar un nuevo registro en
- la base de datos y establece los valores de los parámetros de la consulta SQL
+ (PreparedStatement)se utilizara cuando se le envían parámetros en la consulta. Sirve
+ para insertar/actualizar un nuevo registro en
+ la base de datos y establece los valores de los parámetros de la consulta SQL.
   */
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, producto.getNombre());
