@@ -25,8 +25,14 @@ public class ConexionBaseDatos {
         }
         return pool;
     }
-
+    //método para obtener una nueva conexion del pool de conexiones a la bd
     public static Connection getConnection() throws SQLException {
+        /*
+        getInstance(): para crear un único pool de conexiones
+        getConnection(): para crear una conexión de ese pool de conexiones
+        */
         return getInstance().getConnection();
     }
 }
+
+

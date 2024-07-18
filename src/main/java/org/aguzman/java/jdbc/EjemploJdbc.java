@@ -35,9 +35,10 @@ embargo se hace una validación por buenas practicas
                             //Creamos objeto categoria y le enviamos la coneión por parámetro
                             Repositorio<Categoria> repositorioCategoria = new CategoriaRepositorioImpl(conn);
                             System.out.println("============= Insertar nueva categoria =============");
-                            Categoria categoria = new Categoria();
+                            Categoria categoria = new Categoria();//sin el id
                             categoria.setNombre("Electrohogar");
-                            Categoria nuevaCategoria = repositorioCategoria.guardar(categoria);//guardamos categoria
+                            //guardamos categoria para que nos devuelva el id a la hora de insertarla a
+                            Categoria nuevaCategoria = repositorioCategoria.guardar(categoria);
                             System.out.println("Categoria guardada con éxito: " + nuevaCategoria.getId());
 
                             Repositorio<Producto> repositorio = new ProductoRepositorioImpl(conn);

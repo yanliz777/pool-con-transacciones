@@ -61,7 +61,7 @@ por que la conexión se debe pasar de alguna forma
         {
             sql = "UPDATE productos SET nombre=?, precio=?, categoria_id=?, sku=? WHERE id=?";
         }
-        else //sino Inserta el objeto
+        else //sino, Inserta el objeto
         {
             sql = "INSERT INTO productos(nombre, precio, categoria_id, sku, fecha_registro) VALUES(?,?,?,?,?)";
         }
